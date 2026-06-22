@@ -645,44 +645,46 @@ function login() {
     btn.innerHTML = '<div class="spin"></div> Signing in...';
 
     setTimeout(() => {
-        const storedEmail = localStorage.getItem('userEmail');
-        const storedPass  = localStorage.getItem('userPassword');
+        // ── Look up user in linkup_users array (supports multiple accounts) ──
+        const linkupUsers = JSON.parse(localStorage.getItem('linkup_users')) || [];
+        const userRecord  = linkupUsers.find(u => u.email && u.email.toLowerCase() === email.toLowerCase());
 
-        if (storedEmail && storedEmail !== email) {
+        if (!userRecord) {
             btn.disabled = false;
-            btn.textContent = 'Sign In';
+            btn.innerHTML = 'Sign In';
             document.getElementById('loginEmail').classList.add('err');
             errEl.textContent = 'No account found with this email address.';
             return;
         }
 
-        if (storedPass && storedPass !== pass) {
+        if (userRecord.password && userRecord.password !== pass) {
             btn.disabled = false;
-            btn.textContent = 'Sign In';
+            btn.innerHTML = 'Sign In';
             document.getElementById('loginPass').classList.add('err');
             errEl.textContent = 'Incorrect password. Please try again.';
             return;
         }
 
         // ── Suspension check ────────────────────────────────────
-        const linkupUsers = JSON.parse(localStorage.getItem('linkup_users')) || [];
-        const userRecord  = linkupUsers.find(u => u.email && u.email.toLowerCase() === email.toLowerCase());
-        if (userRecord && userRecord.status === 'Banned') {
+        if (userRecord.status === 'Banned') {
             btn.disabled = false;
             btn.innerHTML = 'Sign In';
             document.getElementById('loginEmail').classList.add('err');
             errEl.style.color = '#ef4444';
-            errEl.textContent = '🚫 Your account has been suspended. Please contact support for assistance.';
+            errEl.textContent = 'Your account has been suspended. Please contact support for assistance.';
             return;
         }
-        // ────────────────────────────────────────────────────────
 
         if (document.getElementById('rememberMe').checked) {
             localStorage.setItem('rememberEmail', email);
         }
 
-        localStorage.setItem('userEmail', email);
-        localStorage.setItem('isLoggedIn', 'true');
+        // ── Set active session ───────────────────────────────────
+        localStorage.setItem('userEmail',    userRecord.email);
+        localStorage.setItem('userName',     userRecord.name  || userRecord.email.split('@')[0]);
+        localStorage.setItem('userPhone',    userRecord.phone || '');
+        localStorage.setItem('userPassword', userRecord.password || '');
+        localStorage.setItem('isLoggedIn',   'true');
         localStorage.removeItem('isGuest');
 
         showToast('Signed in successfully.', 'ok');

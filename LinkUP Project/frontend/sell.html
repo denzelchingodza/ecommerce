@@ -367,6 +367,7 @@ descEl.addEventListener('input', () => {
 
 /* ── IMAGE FILES ──────────────────────────────────────────── */
 let selectedFiles = [];
+let selectedImages = []; // base64 data URLs — persists across reloads
 
 function handleFiles(files) {
     const arr = Array.from(files);
@@ -379,9 +380,10 @@ function handleFiles(files) {
         selectedFiles.push(file);
         const reader = new FileReader();
         reader.onload = e => {
+            selectedImages.push(e.target.result); // store base64
             const wrap = document.createElement('div');
             wrap.className = 'preview-item';
-            const idx = selectedFiles.length - 1;
+            const idx = selectedImages.length - 1;
             wrap.innerHTML = `<img src="${e.target.result}"><button class="preview-remove" onclick="removeImg(${idx})">✕</button>`;
             document.getElementById('preview').appendChild(wrap);
         };
@@ -397,6 +399,7 @@ function handleDrop(e) {
 
 function removeImg(idx) {
     selectedFiles.splice(idx, 1);
+    selectedImages.splice(idx, 1);
     renderPreview();
 }
 
@@ -443,37 +446,41 @@ function submitProduct() {
     btn.disabled = true;
     btn.innerHTML = '<span class="spinner"></span>Publishing...';
 
-    const images = selectedFiles.map(f => URL.createObjectURL(f));
+    // Use base64 data URLs (persist across reloads, unlike blob URLs)
+    const images = [...selectedImages];
 
     setTimeout(() => {
+        const seller = localStorage.getItem('userName') || localStorage.getItem('userEmail') || 'Anonymous';
+        const listedAt = new Date().toLocaleDateString('en-ZA');
+
         // ── Save to seller's own listing store ─────────────────
         const myProds = JSON.parse(localStorage.getItem('products')) || [];
-        const newProd = { name, price: Number(price), desc, category, location, condition, delivery, images, listedAt: new Date().toLocaleDateString('en-ZA'), seller: localStorage.getItem('userName') || localStorage.getItem('userEmail') || 'Anonymous' };
+        const newProd = { name, price: Number(price), desc, category, location, condition, delivery, images, listedAt, seller };
         myProds.unshift(newProd);
         localStorage.setItem('products', JSON.stringify(myProds));
 
-        // ── Also push into admin_products so it appears on
-        //    the marketplace (products.html) and in the admin panel ──
+        // ── Push into admin_products → appears on marketplace + admin panel ──
         const adminProds = JSON.parse(localStorage.getItem('admin_products')) || [];
         adminProds.unshift({
             name,
-            price: Number(price),
+            price:       Number(price),
             category,
-            image: images[0] || '',
+            image:       images[0] || '',
+            images,
             description: desc,
-            status: 'Active',
-            seller: newProd.seller,
+            status:      'Active',
+            seller,
             condition,
             location,
             delivery,
-            listedAt: newProd.listedAt
+            listedAt
         });
         localStorage.setItem('admin_products', JSON.stringify(adminProds));
 
         btn.disabled = false;
-        btn.textContent = '🚀 Publish Listing';
+        btn.textContent = 'Publish Listing';
 
-        showToast(name + ' is now live on the marketplace! 🎉', 'success');
+        showToast(name + ' is now live on the marketplace!', 'success');
 
         // Reset form
         document.getElementById('prodName').value = '';
@@ -481,7 +488,8 @@ function submitProduct() {
         document.getElementById('desc').value = '';
         document.getElementById('location').value = '';
         document.getElementById('charCount').textContent = '0 / 300';
-        selectedFiles = [];
+        selectedFiles  = [];
+        selectedImages = [];
         document.getElementById('preview').innerHTML = '';
 
         renderMyListings();

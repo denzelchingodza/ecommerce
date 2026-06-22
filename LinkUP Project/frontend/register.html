@@ -778,22 +778,36 @@ function register() {
         return;
     }
 
-    // ── Check if email already registered ──
-    const existingEmail = localStorage.getItem('userEmail');
-    if (existingEmail && existingEmail === email) {
+    // ── Check if email already registered (checks all users) ──
+    const existingUsers = JSON.parse(localStorage.getItem('linkup_users')) || [];
+    if (existingUsers.find(u => u.email && u.email.toLowerCase() === email.toLowerCase())) {
         document.getElementById('regEmail').classList.add('err');
         errEl.textContent = 'An account with this email already exists.';
         return;
     }
 
-    // ── Loading state (same pattern as login) ──
+    // ── Loading state ──
     btn.disabled = true;
     btn.innerHTML = '<div class="spin"></div> Creating account...';
 
     setTimeout(() => {
         const displayName = first + ' ' + last;
 
-        // ── Persist user data (same keys as login page expects) ──
+        // ── Register in users list (password stored here for login lookup) ──
+        const users = JSON.parse(localStorage.getItem('linkup_users')) || [];
+        users.unshift({
+            id:       users.length + 1,
+            name:     displayName,
+            email:    email,
+            password: pass,
+            phone:    phone,
+            status:   'Active',
+            role:     'Buyer',
+            joined:   new Date().toLocaleDateString('en-ZA')
+        });
+        localStorage.setItem('linkup_users', JSON.stringify(users));
+
+        // ── Set active session ──
         localStorage.setItem('userEmail',    email);
         localStorage.setItem('userPassword', pass);
         localStorage.setItem('userName',     displayName);
@@ -802,19 +816,7 @@ function register() {
         localStorage.setItem('isLoggedIn',   'true');
         localStorage.removeItem('isGuest');
 
-        // ── Register in users list for admin ──
-        const users = JSON.parse(localStorage.getItem('linkup_users')) || [];
-        users.unshift({
-            id:     users.length + 1,
-            name:   displayName,
-            email:  email,
-            status: 'Active',
-            role:   'Buyer',
-            joined: new Date().toLocaleDateString('en-ZA')
-        });
-        localStorage.setItem('linkup_users', JSON.stringify(users));
-
-        showToast('Account created! Welcome to LinkUP 🎉', 'ok');
+        showToast('Account created! Welcome to LinkUP', 'ok');
         setTimeout(() => location.href = 'index.html', 900);
     }, 1100);
 }
