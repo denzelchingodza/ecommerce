@@ -6,7 +6,7 @@
 
 LinkUP is a peer-to-peer e-commerce marketplace built as a school project for South Africa. While it runs entirely on `localStorage` rather than a live database, it functions exactly like a real marketplace: users can register, browse, list products, add to cart, check out via PayFast, message sellers, and manage their accounts — and admins have a fully operational control panel to manage the whole platform.
 
-**Live demo:** [boisterous-biscotti-ebb824.netlify.app](https://boisterous-biscotti-ebb824.netlify.app)
+**Live demo:** [ecommerce-seven-iota-31.vercel.app](https://ecommerce-seven-iota-31.vercel.app)
 
 **Admin portal:** navigate to `/admin-login.html` and use either of these credentials to manage users, products, and platform settings:
 
@@ -65,7 +65,7 @@ Most school demo projects are static mockups. LinkUP is not. Every feature you s
 - Consistent topbar across all 12+ pages
 - Real-time buyer-seller chat interface
 - About page with developer information
-- Deployed on Netlify
+- Deployed on Vercel
 
 ---
 
@@ -78,7 +78,7 @@ Most school demo projects are static mockups. LinkUP is not. Every feature you s
 | Database | MongoDB — Motor async driver *(architecture ready)* |
 | Auth     | JWT — python-jose, bcrypt — passlib *(architecture ready)* |
 | Payment  | PayFast sandbox (real integration)        |
-| Deploy   | Netlify (frontend)                        |
+| Deploy   | Vercel (frontend)                         |
 
 > The backend is fully architected and the API is documented below. The live demo runs on the frontend with localStorage — swapping in the real backend requires only the call changes shown in the Backend Setup section.
 
