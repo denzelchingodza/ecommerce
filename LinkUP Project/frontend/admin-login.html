@@ -3,367 +3,465 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LinkUP — Admin Portal</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
+<title>Admin Sign In — LinkUP</title>
+<link rel="stylesheet" href="style.css">
 <style>
-:root {
-    --blue:      #1877f2;
-    --blue-dark: #1360cc;
-    --bg:        #f1f5f9;
-    --surface:   #ffffff;
-    --text:      #0f172a;
-    --muted:     #64748b;
-    --border:    #e4e9f2;
-    --red:       #ef4444;
-    --green:     #10b981;
-    --radius:    14px;
-}
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
-    font-family: 'Inter', sans-serif;
-    background: #0f172a;
+    font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
+    background: #f1f5f9;
+    color: #0f172a;
     min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 24px;
     -webkit-font-smoothing: antialiased;
 }
 
-/* Background grid */
-body::before {
+/* ── FULL PAGE GRID ─────────────────────────────────────────── */
+.auth-page {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 100vh;
+}
+
+/* ── LEFT — brand panel ─────────────────────────────────────── */
+.brand-panel {
+    background: linear-gradient(155deg, #1877f2 0%, #1360cc 55%, #0d4fa8 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 48px 52px;
+    position: relative;
+    overflow: hidden;
+}
+
+.brand-panel::before {
     content: '';
-    position: fixed;
-    inset: 0;
-    background-image:
-        linear-gradient(rgba(24,119,242,0.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(24,119,242,0.04) 1px, transparent 1px);
-    background-size: 40px 40px;
+    position: absolute;
+    width: 520px; height: 520px;
+    border-radius: 50%;
+    border: 80px solid rgba(255,255,255,.06);
+    top: -180px; right: -180px;
     pointer-events: none;
 }
 
-.card {
-    background: #1e293b;
-    border: 1px solid rgba(255,255,255,0.06);
-    border-radius: 20px;
-    padding: 48px 40px;
-    width: 100%;
-    max-width: 420px;
-    position: relative;
-    box-shadow: 0 24px 64px rgba(0,0,0,0.4);
-}
-
-/* Top accent bar */
-.card::before {
+.brand-panel::after {
     content: '';
     position: absolute;
-    top: 0; left: 24px; right: 24px;
-    height: 2px;
-    background: linear-gradient(90deg, #1877f2, #60a5fa, #1877f2);
-    border-radius: 0 0 2px 2px;
+    width: 340px; height: 340px;
+    border-radius: 50%;
+    border: 60px solid rgba(255,255,255,.04);
+    bottom: -120px; left: -80px;
+    pointer-events: none;
 }
 
-.badge {
+.bp-logo {
+    font-size: 30px;
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: .4px;
+    position: relative; z-index: 1;
+}
+
+.bp-body {
+    position: relative; z-index: 1;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 40px 0;
+}
+
+.bp-headline {
+    font-size: clamp(28px, 3.5vw, 42px);
+    font-weight: 800;
+    color: #fff;
+    line-height: 1.18;
+    letter-spacing: -.5px;
+    margin-bottom: 18px;
+}
+
+.bp-headline span { color: rgba(255,255,255,.55); }
+
+.bp-sub {
+    font-size: 16px;
+    color: rgba(255,255,255,.7);
+    line-height: 1.7;
+    max-width: 360px;
+    margin-bottom: 40px;
+    font-weight: 400;
+}
+
+.bp-features { display: flex; flex-direction: column; gap: 16px; }
+
+.bp-feature { display: flex; align-items: center; gap: 14px; }
+
+.bp-feature-icon {
+    width: 40px; height: 40px;
+    border-radius: 11px;
+    background: rgba(255,255,255,.12);
+    border: 1px solid rgba(255,255,255,.16);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+}
+
+.bp-feature-icon svg {
+    width: 18px; height: 18px;
+    stroke: rgba(255,255,255,.9);
+    fill: none; stroke-width: 1.8;
+    stroke-linecap: round; stroke-linejoin: round;
+}
+
+.bp-feature-text strong {
+    display: block;
+    font-size: 14px; font-weight: 700;
+    color: #fff; margin-bottom: 1px;
+}
+
+.bp-feature-text span { font-size: 12px; color: rgba(255,255,255,.55); }
+
+.bp-stats {
+    display: flex;
+    gap: 28px;
+    position: relative; z-index: 1;
+    padding-top: 28px;
+    border-top: 1px solid rgba(255,255,255,.12);
+}
+
+.bp-stat strong {
+    display: block;
+    font-size: 22px; font-weight: 800;
+    color: #fff; line-height: 1;
+}
+
+.bp-stat span {
+    font-size: 11px;
+    color: rgba(255,255,255,.5);
+    font-weight: 500;
+    letter-spacing: .3px;
+}
+
+/* ── RIGHT — form panel ─────────────────────────────────────── */
+.form-panel {
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 48px 52px;
+    overflow-y: auto;
+}
+
+.form-inner {
+    width: 100%;
+    max-width: 380px;
+}
+
+/* Admin badge */
+.admin-badge {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    background: rgba(24,119,242,0.15);
-    color: #60a5fa;
-    border: 1px solid rgba(24,119,242,0.25);
+    background: rgba(24,119,242,.08);
+    color: #1877f2;
+    border: 1px solid rgba(24,119,242,.2);
     border-radius: 999px;
     padding: 4px 12px;
     font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.06em;
+    font-weight: 700;
+    letter-spacing: .06em;
     text-transform: uppercase;
-    margin-bottom: 24px;
+    margin-bottom: 18px;
 }
 
 .badge-dot {
     width: 6px; height: 6px;
-    background: #60a5fa;
+    background: #1877f2;
     border-radius: 50%;
     animation: pulse 2s ease infinite;
 }
 
 @keyframes pulse {
     0%, 100% { opacity: 1; }
-    50% { opacity: 0.4; }
+    50%       { opacity: 0.35; }
 }
 
-.logo {
-    font-size: 28px;
-    font-weight: 800;
-    color: #fff;
-    margin-bottom: 6px;
-    letter-spacing: -0.5px;
+.form-hdr { margin-bottom: 22px; }
+
+.form-hdr h1 {
+    font-size: 26px; font-weight: 800;
+    color: #0f172a; margin-bottom: 6px;
+    letter-spacing: -.3px;
 }
 
-.logo span { color: #1877f2; }
-
-.subtitle {
-    color: #64748b;
-    font-size: 14px;
-    margin-bottom: 36px;
-}
-
-.divider {
-    height: 1px;
-    background: rgba(255,255,255,0.06);
-    margin: 28px 0;
-}
-
-label {
-    display: block;
-    font-size: 12px;
-    font-weight: 600;
-    color: #94a3b8;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    margin-bottom: 8px;
-}
-
-.input-wrap {
-    position: relative;
-    margin-bottom: 16px;
-}
-
-.input-wrap svg {
-    position: absolute;
-    left: 14px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 16px; height: 16px;
-    stroke: #475569;
-    fill: none;
-    stroke-width: 2;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-    pointer-events: none;
-}
-
-input[type="email"],
-input[type="password"],
-input[type="text"] {
-    width: 100%;
-    background: #0f172a;
-    border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 10px;
-    padding: 12px 14px 12px 40px;
-    font-size: 14px;
-    color: #f1f5f9;
-    font-family: inherit;
-    transition: border-color .2s, box-shadow .2s;
-    outline: none;
-}
-
-input:focus {
-    border-color: #1877f2;
-    box-shadow: 0 0 0 3px rgba(24,119,242,0.15);
-}
-
-input.err { border-color: var(--red); }
-
-.toggle-pw {
-    position: absolute;
-    right: 12px;
-    top: 50%;
-    transform: translateY(-50%);
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 4px;
-    color: #475569;
-}
-
-.toggle-pw svg {
-    width: 16px; height: 16px;
-    stroke: currentColor;
-    fill: none;
-    stroke-width: 2;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-    position: static;
-    transform: none;
-}
-
-.error-msg {
-    background: rgba(239,68,68,0.1);
-    border: 1px solid rgba(239,68,68,0.2);
-    border-radius: 8px;
-    padding: 10px 14px;
-    font-size: 13px;
-    color: #fca5a5;
-    margin-bottom: 16px;
-    display: none;
-}
-
-.error-msg.show { display: block; }
-
-.submit-btn {
-    width: 100%;
-    background: linear-gradient(135deg, #1877f2, #1360cc);
-    color: #fff;
-    border: none;
-    border-radius: 10px;
-    padding: 13px;
-    font-size: 14px;
-    font-weight: 600;
-    font-family: inherit;
-    cursor: pointer;
-    transition: opacity .2s, transform .1s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    margin-top: 8px;
-}
-
-.submit-btn:hover { opacity: 0.9; }
-.submit-btn:active { transform: scale(0.99); }
-.submit-btn:disabled { opacity: 0.6; cursor: not-allowed; }
-
-.spin {
-    width: 16px; height: 16px;
-    border: 2px solid rgba(255,255,255,0.3);
-    border-top-color: #fff;
-    border-radius: 50%;
-    animation: spin .7s linear infinite;
-}
-
-@keyframes spin { to { transform: rotate(360deg); } }
-
-.footer-note {
-    text-align: center;
-    font-size: 12px;
-    color: #334155;
-    margin-top: 24px;
-}
-
-.footer-note a {
-    color: #475569;
-    text-decoration: none;
-}
-
-.footer-note a:hover { color: #60a5fa; }
+.form-hdr p { font-size: 14px; color: #64748b; line-height: 1.6; }
 
 /* Warning box */
 .warning-box {
-    background: rgba(245,158,11,0.1);
-    border: 1px solid rgba(245,158,11,0.2);
-    border-radius: 10px;
-    padding: 12px 14px;
-    font-size: 12px;
-    color: #fbbf24;
+    background: rgba(245,158,11,.08);
+    border: 1px solid rgba(245,158,11,.25);
+    border-radius: 11px;
+    padding: 11px 14px;
+    font-size: 12.5px;
+    color: #92400e;
     margin-bottom: 20px;
     display: flex;
-    gap: 8px;
+    gap: 9px;
     align-items: flex-start;
+    line-height: 1.5;
 }
 
 .warning-box svg {
-    width: 14px; height: 14px;
-    flex-shrink: 0;
-    margin-top: 1px;
-    stroke: #fbbf24;
-    fill: none;
-    stroke-width: 2;
-    stroke-linecap: round;
-    stroke-linejoin: round;
+    width: 15px; height: 15px;
+    flex-shrink: 0; margin-top: 1px;
+    stroke: #d97706; fill: none;
+    stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
 }
 
-/* Toast */
+.f-group { margin-bottom: 16px; }
+
+.f-group label {
+    display: block;
+    font-size: 12px; font-weight: 700;
+    color: #475569;
+    text-transform: uppercase; letter-spacing: .45px;
+    margin-bottom: 7px;
+}
+
+.f-input {
+    width: 100%; padding: 13px 15px;
+    border: 1.5px solid #dbe2ea;
+    border-radius: 11px;
+    background: #f8fafc;
+    font-size: 14px; font-family: inherit;
+    color: #0f172a; outline: none;
+    transition: border-color .18s, box-shadow .18s, background .18s;
+}
+
+.f-input:focus {
+    border-color: #1877f2;
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(24,119,242,.11);
+}
+
+.f-input.err { border-color: #ef4444; background: #fff5f5; }
+.f-input::placeholder { color: #b0b8c8; }
+
+.pw-wrap { position: relative; }
+.pw-wrap .f-input { padding-right: 46px; }
+
+.pw-toggle {
+    position: absolute; right: 13px; top: 50%;
+    transform: translateY(-50%);
+    background: none; border: none; cursor: pointer;
+    color: #94a3b8; padding: 0;
+    display: flex; align-items: center; justify-content: center;
+    transition: color .18s;
+}
+
+.pw-toggle:hover { color: #1877f2; }
+
+.pw-toggle svg {
+    width: 17px; height: 17px;
+    stroke: currentColor; fill: none;
+    stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round;
+}
+
+.f-error {
+    font-size: 12.5px; color: #ef4444;
+    font-weight: 500; min-height: 18px;
+    margin: -8px 0 14px;
+    display: block;
+}
+
+.f-divider { height: 1px; background: #e4e9f2; margin: 20px 0; }
+
+.submit-btn {
+    width: 100%; padding: 14px;
+    border: none; border-radius: 12px;
+    background: #1877f2;
+    color: #fff; font-size: 15px;
+    font-weight: 700; cursor: pointer;
+    font-family: inherit;
+    transition: background .18s, transform .14s, box-shadow .18s;
+    box-shadow: 0 4px 16px rgba(24,119,242,.3);
+    display: flex; align-items: center;
+    justify-content: center; gap: 8px;
+}
+
+.submit-btn:hover { background: #1360cc; transform: translateY(-1px); box-shadow: 0 7px 22px rgba(24,119,242,.35); }
+.submit-btn:active { transform: translateY(0); }
+.submit-btn:disabled { background: #94a3b8; box-shadow: none; cursor: not-allowed; transform: none; }
+
+.spin {
+    width: 16px; height: 16px;
+    border: 2px solid rgba(255,255,255,.35);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spinAnim .6s linear infinite;
+}
+@keyframes spinAnim { to { transform: rotate(360deg); } }
+
+.form-footer {
+    text-align: center; margin-top: 22px;
+    font-size: 14px; color: #64748b;
+}
+
+.form-footer a {
+    color: #1877f2; font-weight: 700;
+    text-decoration: none; transition: color .18s;
+}
+
+.form-footer a:hover { color: #1360cc; }
+
 #toast {
-    position: fixed;
-    bottom: 24px; right: 24px;
-    background: #1e293b;
-    color: #f1f5f9;
-    border: 1px solid rgba(255,255,255,0.08);
-    padding: 12px 18px;
-    border-radius: 10px;
-    font-size: 13px;
-    font-weight: 500;
-    opacity: 0;
-    pointer-events: none;
-    z-index: 9999;
-    transform: translateY(10px);
+    position: fixed; bottom: 24px; right: 24px;
+    background: #0f172a; color: #fff;
+    padding: 13px 20px; border-radius: 12px;
+    font-size: 13px; font-weight: 500;
+    opacity: 0; pointer-events: none;
+    z-index: 10000; transform: translateY(12px);
     transition: opacity .22s, transform .22s;
-    border-left: 3px solid #1877f2;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+    border-left: 4px solid #1877f2;
+    box-shadow: 0 8px 24px rgba(0,0,0,.18);
+    max-width: 280px;
 }
 #toast.show { opacity: 1; transform: translateY(0); }
-#toast.ok   { border-left-color: var(--green); }
-#toast.fail { border-left-color: var(--red); }
+#toast.ok   { border-left-color: #22c55e; }
+#toast.fail { border-left-color: #ef4444; }
+
+@media (max-width: 900px) {
+    .auth-page { grid-template-columns: 1fr; }
+    .brand-panel { display: none; }
+    .form-panel { padding: 40px 24px; min-height: 100vh; }
+}
+
+@media (max-width: 480px) {
+    .form-panel { padding: 32px 18px; }
+    .form-inner { max-width: 100%; }
+}
 </style>
 </head>
 <body>
 
-<div class="card">
-    <div class="badge">
-        <div class="badge-dot"></div>
-        Admin Portal
-    </div>
-
-    <div class="logo">Link<span>UP</span></div>
-    <p class="subtitle">Restricted access — authorised personnel only.</p>
-
-    <div class="warning-box">
-        <svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-        This portal is for administrators only. Unauthorised access attempts are logged.
-    </div>
-
-    <div class="error-msg" id="errorMsg"></div>
-
-    <div>
-        <label>Admin Email</label>
-        <div class="input-wrap">
-            <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-            <input type="email" id="adminEmail" placeholder="admin@linkup.com" onkeypress="if(event.key==='Enter')adminLogin()">
-        </div>
-    </div>
-
-    <div>
-        <label>Admin Password</label>
-        <div class="input-wrap">
-            <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-            <input type="password" id="adminPass" placeholder="Enter admin password" onkeypress="if(event.key==='Enter')adminLogin()">
-            <button class="toggle-pw" onclick="togglePw()">
-                <svg id="eyeIcon" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-            </button>
-        </div>
-    </div>
-
-    <div class="divider"></div>
-
-    <button class="submit-btn" id="loginBtn" onclick="adminLogin()">
-        <svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;">
-            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
-            <polyline points="10 17 15 12 10 7"/>
-            <line x1="15" y1="12" x2="3" y2="12"/>
-        </svg>
-        Access Admin Console
-    </button>
-
-    <p class="footer-note">
-        Not an admin? <a href="login.html">Return to user login →</a>
-    </p>
-</div>
-
 <div id="toast"></div>
 
+<div class="auth-page">
+
+    <!-- LEFT — brand panel -->
+    <div class="brand-panel">
+        <div class="bp-logo">LinkUP Marketplace</div>
+
+        <div class="bp-body">
+            <h2 class="bp-headline">
+                Admin<br>
+                <span>control</span><br>
+                at your fingertips.
+            </h2>
+            <p class="bp-sub">
+                Manage users, listings, and platform activity from one secure console. Restricted to authorised personnel only.
+            </p>
+
+            <div class="bp-features">
+                <div class="bp-feature">
+                    <div class="bp-feature-icon">
+                        <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                    </div>
+                    <div class="bp-feature-text">
+                        <strong>User Management</strong>
+                        <span>View, ban, or restore accounts</span>
+                    </div>
+                </div>
+                <div class="bp-feature">
+                    <div class="bp-feature-icon">
+                        <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                    </div>
+                    <div class="bp-feature-text">
+                        <strong>Platform Analytics</strong>
+                        <span>Track listings, orders, and activity</span>
+                    </div>
+                </div>
+                <div class="bp-feature">
+                    <div class="bp-feature-icon">
+                        <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                    </div>
+                    <div class="bp-feature-text">
+                        <strong>Listing Control</strong>
+                        <span>Suspend or reinstate any product</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bp-stats">
+            <div class="bp-stat"><strong>100+</strong><span>Listings</span></div>
+            <div class="bp-stat"><strong>500+</strong><span>Users</span></div>
+            <div class="bp-stat"><strong>24/7</strong><span>Monitored</span></div>
+        </div>
+    </div>
+
+    <!-- RIGHT — form -->
+    <div class="form-panel">
+        <div class="form-inner">
+
+            <div class="admin-badge">
+                <div class="badge-dot"></div>
+                Admin Portal
+            </div>
+
+            <div class="form-hdr">
+                <h1>Admin Sign In</h1>
+                <p>Restricted access — authorised personnel only.</p>
+            </div>
+
+            <div class="warning-box">
+                <svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                This portal is for administrators only. Unauthorised access attempts are logged.
+            </div>
+
+            <div class="f-group">
+                <label>Admin Email</label>
+                <input class="f-input" type="email" id="adminEmail" placeholder="admin@linkup.com" onkeypress="if(event.key==='Enter')adminLogin()">
+            </div>
+
+            <div class="f-group">
+                <label>Admin Password</label>
+                <div class="pw-wrap">
+                    <input class="f-input" type="password" id="adminPass" placeholder="Enter admin password" onkeypress="if(event.key==='Enter')adminLogin()">
+                    <button class="pw-toggle" type="button" onclick="togglePw()" tabindex="-1">
+                        <svg id="eyeIcon" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                    </button>
+                </div>
+            </div>
+
+            <span class="f-error" id="loginError"></span>
+
+            <div class="f-divider"></div>
+
+            <button class="submit-btn" id="loginBtn" onclick="adminLogin()">
+                <svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;">
+                    <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
+                    <polyline points="10 17 15 12 10 7"/>
+                    <line x1="15" y1="12" x2="3" y2="12"/>
+                </svg>
+                Access Admin Console
+            </button>
+
+            <div class="form-footer">
+                Not an admin? <a href="login.html">Return to user login</a>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
 <script>
-// ── Admin credentials ────────────────────────────────────────
-// Change these to your preferred admin credentials
 const ADMIN_CREDENTIALS = [
-    { email: 'admin@linkup.com',   password: 'Admin@2025' },
-    { email: 'denzel@linkup.com',  password: 'Denzel@2025' },
+    { email: 'admin@linkup.com',  password: 'Admin@2025' },
+    { email: 'denzel@linkup.com', password: 'Denzel@2025' },
 ];
 
-// ── Toast ────────────────────────────────────────────────────
 function showToast(msg, type = '') {
     const t = document.getElementById('toast');
     t.textContent = msg;
@@ -372,7 +470,6 @@ function showToast(msg, type = '') {
     t._t = setTimeout(() => t.className = '', 3000);
 }
 
-// ── Toggle password ──────────────────────────────────────────
 function togglePw() {
     const input = document.getElementById('adminPass');
     const show  = input.type === 'password';
@@ -382,28 +479,24 @@ function togglePw() {
         : `<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>`;
 }
 
-// ── Admin Login ──────────────────────────────────────────────
 function adminLogin() {
-    const email   = document.getElementById('adminEmail').value.trim().toLowerCase();
-    const pass    = document.getElementById('adminPass').value;
-    const errEl   = document.getElementById('errorMsg');
-    const btn     = document.getElementById('loginBtn');
+    const email  = document.getElementById('adminEmail').value.trim().toLowerCase();
+    const pass   = document.getElementById('adminPass').value;
+    const errEl  = document.getElementById('loginError');
+    const btn    = document.getElementById('loginBtn');
 
-    errEl.classList.remove('show');
+    errEl.textContent = '';
     document.getElementById('adminEmail').classList.remove('err');
     document.getElementById('adminPass').classList.remove('err');
 
     if (!email) {
         document.getElementById('adminEmail').classList.add('err');
         errEl.textContent = 'Please enter your admin email address.';
-        errEl.classList.add('show');
         return;
     }
-
     if (!pass) {
         document.getElementById('adminPass').classList.add('err');
         errEl.textContent = 'Please enter your admin password.';
-        errEl.classList.add('show');
         return;
     }
 
@@ -411,9 +504,7 @@ function adminLogin() {
     btn.innerHTML = '<div class="spin"></div> Verifying...';
 
     setTimeout(() => {
-        const match = ADMIN_CREDENTIALS.find(
-            c => c.email === email && c.password === pass
-        );
+        const match = ADMIN_CREDENTIALS.find(c => c.email === email && c.password === pass);
 
         if (!match) {
             btn.disabled = false;
@@ -427,16 +518,13 @@ function adminLogin() {
             document.getElementById('adminEmail').classList.add('err');
             document.getElementById('adminPass').classList.add('err');
             errEl.textContent = 'Invalid credentials. Access denied.';
-            errEl.classList.add('show');
 
-            // Log failed attempt
             const attempts = JSON.parse(localStorage.getItem('admin_failed_attempts') || '[]');
             attempts.push({ email, time: new Date().toISOString() });
             localStorage.setItem('admin_failed_attempts', JSON.stringify(attempts));
             return;
         }
 
-        // Success
         localStorage.setItem('adminLoggedIn', 'true');
         localStorage.setItem('adminEmail', match.email);
         localStorage.setItem('adminName', match.email === 'denzel@linkup.com' ? 'Denzel Chingodza' : 'Admin User');
@@ -445,10 +533,10 @@ function adminLogin() {
     }, 900);
 }
 
-// ── Guard — redirect if already logged in ────────────────────
-if (localStorage.getItem('adminLoggedIn') === 'true') {
-    location.href = 'admin.html';
-}
+// Always require login — clear any existing session
+localStorage.removeItem('adminLoggedIn');
+localStorage.removeItem('adminEmail');
+localStorage.removeItem('adminName');
 </script>
 </body>
 </html>
