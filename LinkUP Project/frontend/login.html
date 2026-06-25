@@ -416,6 +416,7 @@ body {
     .form-inner { max-width: 100%; }
 }
 </style>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
 
@@ -598,9 +599,67 @@ function togglePw(id, btn) {
         : `<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>`;
 }
 
-/* SOCIAL LOGIN */
+/* GOOGLE SIGN-IN */
+const GOOGLE_CLIENT_ID = 'YOUR_GOOGLE_CLIENT_ID'; // ← paste your Client ID here
+
 function socialLogin(provider) {
-    showToast(provider + ' sign-in is coming soon.', 'ok');
+    if (provider !== 'Google') return;
+    if (typeof google === 'undefined') {
+        showToast('Google Sign-In is loading, please try again.', 'fail');
+        return;
+    }
+    const client = google.accounts.oauth2.initTokenClient({
+        client_id: GOOGLE_CLIENT_ID,
+        scope: 'email profile',
+        callback: async (tokenResponse) => {
+            if (tokenResponse.error) {
+                showToast('Google sign-in failed. Please try again.', 'fail');
+                return;
+            }
+            try {
+                const res  = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+                    headers: { Authorization: 'Bearer ' + tokenResponse.access_token }
+                });
+                const user = await res.json();
+                handleGoogleLogin(user.name, user.email);
+            } catch (e) {
+                showToast('Could not retrieve Google account info.', 'fail');
+            }
+        }
+    });
+    client.requestAccessToken();
+}
+
+function handleGoogleLogin(name, email) {
+    const users = JSON.parse(localStorage.getItem('linkup_users')) || [];
+    const found = users.find(u => u.email && u.email.toLowerCase() === email.toLowerCase());
+
+    if (!found) {
+        // Auto-register if no account exists
+        const newUser = {
+            id:       users.length + 1,
+            name,
+            email,
+            password: '',
+            phone:    '',
+            status:   'Active',
+            role:     'Buyer',
+            joined:   new Date().toLocaleDateString('en-ZA'),
+            googleAuth: true
+        };
+        users.unshift(newUser);
+        localStorage.setItem('linkup_users', JSON.stringify(users));
+    } else if (found.status === 'Banned') {
+        showToast('Your account has been suspended.', 'fail');
+        return;
+    }
+
+    localStorage.setItem('userEmail',  email);
+    localStorage.setItem('userName',   name);
+    localStorage.setItem('isLoggedIn', 'true');
+    localStorage.removeItem('isGuest');
+    showToast('Signed in with Google.', 'ok');
+    setTimeout(() => location.href = 'index.html', 900);
 }
 
 /* GUEST BROWSE */

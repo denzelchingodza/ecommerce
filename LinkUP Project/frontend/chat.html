@@ -691,11 +691,7 @@ a { text-decoration: none; color: inherit; }
     .info-panel { display: none; }
 }
 
-@media (max-width: 720px) {
-    .topbar { padding: 0 14px; }
-    .topbar-nav a { font-size: 12px; padding: 6px 9px; }
-    .topbar-brand .tag { display: none; }
-
+@media (max-width: 900px) {
     .conv-panel {
         position: fixed; left: 0; top: var(--topbar-h);
         height: calc(100vh - var(--topbar-h));
@@ -715,10 +711,6 @@ a { text-decoration: none; color: inherit; }
 
     html, body { overflow: auto; }
     .chat-shell { height: calc(100vh - var(--topbar-h)); }
-}
-
-@media (max-width: 480px) {
-    .topbar-nav { display: none; }
 }
 </style>
 </head>

@@ -473,6 +473,7 @@ body {
     .f-grid-2 { grid-template-columns: 1fr; gap: 0; }
 }
 </style>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
 
@@ -711,9 +712,76 @@ function checkStrength(val) {
     label.textContent     = lvl.txt;
 }
 
-/* ── SOCIAL SIGN UP ──────────────────────────────────────────── */
+/* ── GOOGLE SIGN-IN ──────────────────────────────────────────── */
+const GOOGLE_CLIENT_ID = 'YOUR_GOOGLE_CLIENT_ID'; // ← paste your Client ID here
+
 function socialSignup(provider) {
-    showToast(provider + ' sign-up is coming soon.', 'ok');
+    if (provider !== 'Google') return;
+    if (typeof google === 'undefined') {
+        showToast('Google Sign-In is loading, please try again.', 'fail');
+        return;
+    }
+    const client = google.accounts.oauth2.initTokenClient({
+        client_id: GOOGLE_CLIENT_ID,
+        scope: 'email profile',
+        callback: async (tokenResponse) => {
+            if (tokenResponse.error) {
+                showToast('Google sign-in failed. Please try again.', 'fail');
+                return;
+            }
+            try {
+                const res  = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+                    headers: { Authorization: 'Bearer ' + tokenResponse.access_token }
+                });
+                const user = await res.json();
+                handleGoogleRegister(user.name, user.email);
+            } catch (e) {
+                showToast('Could not retrieve Google account info.', 'fail');
+            }
+        }
+    });
+    client.requestAccessToken();
+}
+
+function handleGoogleRegister(name, email) {
+    const users = JSON.parse(localStorage.getItem('linkup_users')) || [];
+    const existing = users.find(u => u.email && u.email.toLowerCase() === email.toLowerCase());
+
+    if (existing) {
+        // Account already exists — just log them in
+        if (existing.status === 'Banned') {
+            showToast('Your account has been suspended.', 'fail');
+            return;
+        }
+        localStorage.setItem('userEmail',  email);
+        localStorage.setItem('userName',   existing.name || name);
+        localStorage.setItem('isLoggedIn', 'true');
+        localStorage.removeItem('isGuest');
+        showToast('Welcome back! Signed in with Google.', 'ok');
+        setTimeout(() => location.href = 'index.html', 900);
+        return;
+    }
+
+    // New user — register automatically
+    const newUser = {
+        id:         users.length + 1,
+        name,
+        email,
+        password:   '',
+        phone:      '',
+        status:     'Active',
+        role:       'Buyer',
+        joined:     new Date().toLocaleDateString('en-ZA'),
+        googleAuth: true
+    };
+    users.unshift(newUser);
+    localStorage.setItem('linkup_users', JSON.stringify(users));
+    localStorage.setItem('userEmail',    email);
+    localStorage.setItem('userName',     name);
+    localStorage.setItem('isLoggedIn',   'true');
+    localStorage.removeItem('isGuest');
+    showToast('Account created with Google! Welcome to LinkUP.', 'ok');
+    setTimeout(() => location.href = 'index.html', 900);
 }
 
 /* ── CLEAR ERRORS ────────────────────────────────────────────── */

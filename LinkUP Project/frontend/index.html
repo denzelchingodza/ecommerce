@@ -867,8 +867,7 @@ body {
     .trust-strip { gap: 28px; padding: 0 24px; }
 }
 
-@media (max-width: 768px) {
-    .topbar { padding: 0 20px; height: 64px; }
+@media (max-width: 900px) {
     .home-section { padding: 24px 20px; }
     .category-strip { padding: 20px 20px 0; }
     .slideshow { margin: 0 20px 28px; height: 160px; }
@@ -877,10 +876,12 @@ body {
 }
 
 @media (max-width: 580px) {
-    .nav-right a:not(.cart-link):not(.login-link):not(.active) { display: none; }
     .footer { padding: 36px 20px 24px; }
     .footer-grid { grid-template-columns: 1fr; gap: 24px; }
-    .search-box select { min-width: 100px; font-size: 12px; }
+    .search-box { flex-direction: column; border-radius: 12px; }
+    .search-box select { min-width: 100%; border-right: none; border-bottom: 1px solid var(--border); border-radius: 12px 12px 0 0; }
+    .search-box input { border-radius: 0; }
+    .search-box button { border-radius: 0 0 12px 12px; padding: 14px; }
 }
 </style>
 </head>

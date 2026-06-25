@@ -1226,12 +1226,13 @@ tr:hover td { background: #f8fafc; }
 
 .mobile-nav-close:hover { background: rgba(255,255,255,.2); }
 
-@media (max-width: 768px) {
+@media (max-width: 900px) {
     .hamburger { display: flex; }
 
     /* Hide the desktop nav-right links on mobile */
     .topbar .nav-right,
-    .topbar .topbar-nav { display: none !important; }
+    .topbar .topbar-nav,
+    .topbar > nav { display: none !important; }
 
     /* Re-show just the hamburger and brand */
     .topbar { flex-direction: row !important; height: 64px !important; padding: 0 20px !important; gap: 0 !important; }
