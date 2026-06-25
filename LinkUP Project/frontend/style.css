@@ -1177,11 +1177,13 @@ tr:hover td { background: #f8fafc; }
     background: rgba(0,0,0,0.5);
     z-index: 1099;
     opacity: 0;
+    pointer-events: none;
     transition: opacity 0.28s;
 }
 
 .mobile-nav-overlay.open {
     opacity: 1;
+    pointer-events: auto;
 }
 
 .mobile-nav a {
