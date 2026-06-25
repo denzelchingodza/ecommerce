@@ -757,7 +757,7 @@ function showToast(msg) {
    CART
 ═══════════════════════════════════════════════════════════ */
 function addToCart(p) {
-    if (localStorage.getItem('isGuest') === 'true') { showGuestPrompt(); return; }
+    if (localStorage.getItem('isLoggedIn') !== 'true' || !localStorage.getItem('userEmail')) { showGuestPrompt(); return; }
     const cart = JSON.parse(localStorage.getItem('cart')) || [];
     cart.push(p);
     localStorage.setItem('cart', JSON.stringify(cart));

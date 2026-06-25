@@ -1795,10 +1795,14 @@ function unsaveItem(btn) {
 /* ── Load Account Data from localStorage ──────────────────── */
 function loadAccountData() {
     const email = (localStorage.getItem('userEmail') || '').toLowerCase();
+    const name  = (localStorage.getItem('userName') || '').toLowerCase();
 
-    // My listings: from admin_products where seller matches
+    // My listings: match by sellerEmail (new) or seller display name (legacy)
     const allProducts = JSON.parse(localStorage.getItem('admin_products')) || [];
-    const myListings  = allProducts.filter(p => p.seller && p.seller.toLowerCase() === email);
+    const myListings  = allProducts.filter(p => {
+        if (p.sellerEmail) return p.sellerEmail.toLowerCase() === email;
+        return p.seller && (p.seller.toLowerCase() === email || p.seller.toLowerCase() === name);
+    });
 
     // My orders: from linkup_orders where buyer matches
     const allOrders = JSON.parse(localStorage.getItem('linkup_orders')) || [];
@@ -2062,8 +2066,12 @@ loadAccountData();
 // Sync profile-hero stat numbers from real data
 (function syncProfileStats() {
     const email = (localStorage.getItem('userEmail') || '').toLowerCase();
+    const name  = (localStorage.getItem('userName') || '').toLowerCase();
     const allProducts = JSON.parse(localStorage.getItem('admin_products')) || [];
-    const myListings  = allProducts.filter(p => p.seller && p.seller.toLowerCase() === email);
+    const myListings  = allProducts.filter(p => {
+        if (p.sellerEmail) return p.sellerEmail.toLowerCase() === email;
+        return p.seller && (p.seller.toLowerCase() === email || p.seller.toLowerCase() === name);
+    });
     const allOrders   = JSON.parse(localStorage.getItem('linkup_orders')) || [];
     const myOrders    = allOrders.filter(o => o.buyer && o.buyer.toLowerCase() === email);
     const allSaved    = JSON.parse(localStorage.getItem('linkup_saved')) || [];

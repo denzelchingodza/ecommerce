@@ -447,12 +447,13 @@ function submitProduct() {
     const images = [...selectedImages];
 
     setTimeout(() => {
-        const seller = localStorage.getItem('userName') || localStorage.getItem('userEmail') || 'Anonymous';
+        const sellerEmail = localStorage.getItem('userEmail') || '';
+        const seller = localStorage.getItem('userName') || sellerEmail || 'Anonymous';
         const listedAt = new Date().toLocaleDateString('en-ZA');
 
         // ── Save to seller's own listing store ─────────────────
         const myProds = JSON.parse(localStorage.getItem('products')) || [];
-        const newProd = { name, price: Number(price), desc, category, location, condition, delivery, images, listedAt, seller };
+        const newProd = { name, price: Number(price), desc, category, location, condition, delivery, images, listedAt, seller, sellerEmail };
         myProds.unshift(newProd);
         localStorage.setItem('products', JSON.stringify(myProds));
 
@@ -467,6 +468,7 @@ function submitProduct() {
             description: desc,
             status:      'Active',
             seller,
+            sellerEmail,
             condition,
             location,
             delivery,

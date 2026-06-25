@@ -1381,8 +1381,34 @@ function showToast(msg) {
     t._t = setTimeout(() => t.classList.remove('show'), 2800);
 }
 
+/* ── Auth helpers ──────────────────────────────────────────── */
+function isLoggedIn() {
+    return localStorage.getItem('isLoggedIn') === 'true' && localStorage.getItem('userEmail');
+}
+
+function showGuestPrompt() {
+    if (document.getElementById('guestModal')) return;
+    const modal = document.createElement('div');
+    modal.id = 'guestModal';
+    modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;z-index:9999;padding:16px;';
+    modal.innerHTML = `
+      <div style="background:#fff;border-radius:20px;padding:36px 32px;max-width:380px;width:100%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.2);">
+        <div style="width:64px;height:64px;border-radius:50%;background:#eff6ff;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:28px;">🔒</div>
+        <h3 style="font-size:20px;font-weight:800;color:#111827;margin:0 0 10px;">Sign in to continue</h3>
+        <p style="font-size:14px;color:#6b7280;line-height:1.6;margin:0 0 24px;">Create a free account or sign in to add items to your cart and shop on LinkUP.</p>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <a href="login.html" style="background:#1877f2;color:#fff;border-radius:12px;padding:13px;font-weight:700;font-size:14px;text-decoration:none;display:block;">Sign In</a>
+          <a href="register.html" style="background:#f0f7ff;color:#1877f2;border-radius:12px;padding:13px;font-weight:700;font-size:14px;text-decoration:none;display:block;border:1.5px solid #1877f2;">Create Free Account</a>
+          <button onclick="document.getElementById('guestModal').remove()" style="background:none;border:none;color:#94a3b8;font-size:13px;cursor:pointer;padding:6px;">Continue Browsing</button>
+        </div>
+      </div>`;
+    document.body.appendChild(modal);
+    modal.addEventListener('click', e => { if (e.target === modal) modal.remove(); });
+}
+
 /* ── Cart ──────────────────────────────────────────────────── */
 function addToCart(name, price, image, description) {
+    if (!isLoggedIn()) { showGuestPrompt(); return; }
     const cart = JSON.parse(localStorage.getItem('cart')) || [];
     cart.push({ name, price, images: [image], description });
     localStorage.setItem('cart', JSON.stringify(cart));
@@ -1398,6 +1424,7 @@ function updateCartCount() {
 
 /* ── Like ──────────────────────────────────────────────────── */
 function likeItem(btn) {
+    if (!isLoggedIn()) { showGuestPrompt(); return; }
     const liked = btn.textContent.includes('♥️');
     btn.textContent = liked ? '♡ Like' : '♥️ Liked';
     btn.style.background = liked ? '' : '#fee2e2';
