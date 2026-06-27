@@ -1,8 +1,8 @@
 # LinkUP Marketplace
 
-> **School Demo Project** — but a highly functional, production-quality one.
+> **School Demo Project**, but a highly functional, production-quality one.
 
-LinkUP is a peer-to-peer e-commerce marketplace built as a school project for South Africa. While it runs entirely on `localStorage` rather than a live database, it functions exactly like a real marketplace: users can register, browse, list products, add to cart, check out via PayFast, message sellers, and manage their accounts — and admins have a fully operational control panel to manage the whole platform.
+LinkUP is a peer-to-peer e-commerce marketplace built as a school project for South Africa. While it runs entirely on `localStorage` rather than a live database, it functions exactly like a real marketplace: users can register, browse, list products, add to cart, check out via PayFast, message sellers, and manage their accounts. Admins have a fully operational control panel to manage the whole platform.
 
 **Live demo:** [boisterous-biscotti-ebb824.netlify.app](https://boisterous-biscotti-ebb824.netlify.app)
 
@@ -17,7 +17,7 @@ LinkUP is a peer-to-peer e-commerce marketplace built as a school project for So
 
 ## What makes this demo different
 
-Most school demo projects are static mockups. LinkUP is not. Every feature you see actually works — data persists between sessions, the admin panel enforces real access control, suspended users are genuinely blocked from logging in, and products you list on the sell page appear immediately in the marketplace. The PayFast integration uses real sandbox credentials and redirects to PayFast's actual checkout page.
+Most school demo projects are static mockups. LinkUP is not. Every feature you see actually works: data persists between sessions, the admin panel enforces real access control, suspended users are genuinely blocked from logging in, and products you list on the sell page appear immediately in the marketplace. The PayFast integration uses real sandbox credentials and redirects to PayFast's actual checkout page.
 
 ---
 
@@ -26,8 +26,8 @@ Most school demo projects are static mockups. LinkUP is not. Every feature you s
 ### Buyer Experience
 - Browse 35+ products across Electronics, Clothing, Furniture, Vehicles, Beauty and Books
 - Advanced filter panel: category, price range (min/max), condition, delivery type, location (SA provinces), deals-only toggle
-- Active filter chips — see exactly what's filtered and remove individual filters instantly
-- Today's Deals strip — horizontal scroll of products under R1,000
+- Active filter chips: see exactly what's filtered and remove individual filters instantly
+- Today's Deals strip: a horizontal scroll of products under R1,000
 - Grid and list view toggle
 - Add to cart, adjust quantities, apply promo codes
 - PayFast sandbox checkout with order confirmation
@@ -46,7 +46,7 @@ Most school demo projects are static mockups. LinkUP is not. Every feature you s
 - Account dashboard with real data: active listings, items sold, orders, saved items
 - Edit profile (name, phone, location, bio, avatar)
 - Change password
-- Guest mode — browse the full marketplace without an account; prompted to sign in only when trying to buy or sell
+- Guest mode: browse the full marketplace without an account; prompted to sign in only when trying to buy or sell
 
 ### Admin Panel (`/admin-login.html`)
 - Dashboard with platform stats (users, products, orders, revenue)
@@ -54,7 +54,7 @@ Most school demo projects are static mockups. LinkUP is not. Every feature you s
 - Product management: view all marketplace listings, suspend/reinstate products
 - Suspended products are hidden from the marketplace immediately
 - Banned users are blocked from logging in and shown a clear suspension message
-- "View Store" button — preview the customer-facing site as a guest without leaving the admin panel
+- "View Store" button to preview the customer-facing site as a guest without leaving the admin panel
 - Global search across users and products
 
 ### Platform
@@ -73,8 +73,8 @@ Most school demo projects are static mockups. LinkUP is not. Every feature you s
 |----------|-------------------------------------------|
 | Frontend | HTML, CSS, JavaScript (localStorage)      |
 | Backend  | FastAPI, Python *(architecture ready)*    |
-| Database | MongoDB — Motor async driver *(architecture ready)* |
-| Auth     | JWT — python-jose, bcrypt — passlib *(architecture ready)* |
+| Database | MongoDB (Motor async driver) *(architecture ready)* |
+| Auth     | JWT (python-jose), bcrypt (passlib) *(architecture ready)* |
 | Payment  | PayFast sandbox (real integration)        |
 | Deploy   | Netlify (frontend)                        |
 

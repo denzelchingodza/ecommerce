@@ -1836,13 +1836,13 @@ function loadAccountData() {
         items.push({
             dot: 'orange',
             icon: '<circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>',
-            title: 'Order placed for ' + o.name + ' — R' + Number(o.price).toLocaleString(),
+            title: 'Order placed for ' + o.name + ', R' + Number(o.price).toLocaleString(),
             sub:   'Order received',
             time:  timeAgo(o.orderedAt)
         });
     });
     if (items.length === 0) {
-        actList.innerHTML = '<li style="padding:24px 0;text-align:center;color:#94a3b8;font-size:14px;">No recent activity yet — start by listing or buying something!</li>';
+        actList.innerHTML = '<li style="padding:24px 0;text-align:center;color:#94a3b8;font-size:14px;">No recent activity yet. Start by listing or buying something!</li>';
     } else {
         actList.innerHTML = items.map(item => `
             <li class="activity-item">
@@ -1898,7 +1898,7 @@ function loadAccountData() {
     // ── My Orders ────────────────────────────────────────────
     const tbody = document.getElementById('ordersBody');
     if (myOrders.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:32px;color:#94a3b8;font-size:14px;">No orders yet — browse the marketplace to start shopping!</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:32px;color:#94a3b8;font-size:14px;">No orders yet. Browse the marketplace to start shopping!</td></tr>`;
     } else {
         tbody.innerHTML = myOrders.map(o => `
             <tr>
@@ -1918,7 +1918,7 @@ function loadAccountData() {
     // ── Saved Items ──────────────────────────────────────────
     const savedGrid = document.getElementById('savedGrid');
     if (mySaved.length === 0) {
-        savedGrid.innerHTML = `<p style="color:#94a3b8;font-size:14px;grid-column:1/-1;padding:8px 0;">No saved items yet — browse the marketplace and save things you like!</p>`;
+        savedGrid.innerHTML = `<p style="color:#94a3b8;font-size:14px;grid-column:1/-1;padding:8px 0;">No saved items yet. Browse the marketplace and save things you like!</p>`;
     } else {
         savedGrid.innerHTML = mySaved.map(s => `
             <div class="saved-card" data-name="${escHtml(s.name)}">
@@ -1988,7 +1988,7 @@ function unsaveItem(btn) {
         const remaining = saved.filter(s => s.user && s.user.toLowerCase() === email).length;
         document.getElementById('ovSaved').textContent = remaining;
         if (remaining === 0) {
-            document.getElementById('savedGrid').innerHTML = `<p style="color:#94a3b8;font-size:14px;grid-column:1/-1;padding:8px 0;">No saved items yet — browse the marketplace and save things you like!</p>`;
+            document.getElementById('savedGrid').innerHTML = `<p style="color:#94a3b8;font-size:14px;grid-column:1/-1;padding:8px 0;">No saved items yet. Browse the marketplace and save things you like!</p>`;
         }
         showToast('Item removed from saved list.', 'ok');
     }, 300);

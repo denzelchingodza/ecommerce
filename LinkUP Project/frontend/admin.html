@@ -1745,7 +1745,7 @@ select.form-input { cursor: pointer; }
     <div class="section" id="sec-analytics">
       <div class="page-hdr">
         <h1>Analytics</h1>
-        <p>Live data from your platform — updates every time you open this view.</p>
+        <p>Live data from your platform. Updates every time you open this view.</p>
       </div>
 
       <!-- Top stat cards (live) -->
@@ -1945,7 +1945,7 @@ select.form-input { cursor: pointer; }
                 <div class="form-group">
                   <label class="form-label">Timezone</label>
                   <select class="form-input">
-                    <option>SAST — UTC+2</option>
+                    <option>SAST (UTC+2)</option>
                     <option>UTC</option>
                     <option>GMT</option>
                   </select>
@@ -2401,7 +2401,7 @@ function suspendProduct(i) {
     const p = adminProducts[realIdx];
     p.status = p.status === 'Suspended' ? 'Active' : 'Suspended';
     saveAdminProducts(); renderProducts(filteredProducts);
-    showToast(p.name + (p.status === 'Suspended' ? ' suspended — hidden from marketplace.' : ' reinstated — now visible on marketplace.'), p.status === 'Suspended' ? 'warn' : 'ok');
+    showToast(p.name + (p.status === 'Suspended' ? ' suspended: hidden from marketplace.' : ' reinstated: now visible on marketplace.'), p.status === 'Suspended' ? 'warn' : 'ok');
 }
 
 function deleteProduct(i) {
@@ -2482,14 +2482,14 @@ function buildActivityFeed() {
     const activities = [];
 
     users.slice(0, 3).forEach(u => {
-        activities.push({ dot:'blue', title:'New user registered', sub: u.name + ' — ' + u.email, time: u.joined || 'Recently' });
+        activities.push({ dot:'blue', title:'New user registered', sub: u.name + ' · ' + u.email, time: u.joined || 'Recently' });
     });
 
     cart.slice(0, 2).forEach(item => {
-        activities.push({ dot:'amber', title:'Item added to cart', sub: item.name + ' — R' + Number(item.price).toLocaleString(), time: 'Today' });
+        activities.push({ dot:'amber', title:'Item added to cart', sub: item.name + ', R' + Number(item.price).toLocaleString(), time: 'Today' });
     });
 
-    activities.push({ dot:'green', title:'Product listed', sub: 'iPhone 11 — R6,000', time: '2 days ago' });
+    activities.push({ dot:'green', title:'Product listed', sub: 'iPhone 11, R6,000', time: '2 days ago' });
     activities.push({ dot:'green', title:'Order completed', sub: 'MacBook Pro M1 delivered', time: '5 days ago' });
     activities.push({ dot:'blue', title:'User upgraded to Seller', sub: 'Alice M.', time: '1 week ago' });
 
